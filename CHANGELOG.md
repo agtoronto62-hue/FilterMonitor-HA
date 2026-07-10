@@ -1,5 +1,5 @@
-# Changelog
+﻿# Changelog
 
-## v0.1.0
+## 0.1.0
 
-- Initial public release
+- Initial public release of the FilterMonitor Home Assistant integration.

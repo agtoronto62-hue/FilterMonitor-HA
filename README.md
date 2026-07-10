@@ -1,64 +1,65 @@
-FilterMonitor Phase 1 pivot deliverables
+# FilterMonitor — Home Assistant Integration
 
-What is included
-- web/airscape.html
-- web/esp32.html
-- web/css/app.css
-- web/js/api.js
-- web/js/airscape.js
-- web/js/esp32.js
-- include/http_server_manager.h
-- src/http_server_manager.cpp (placeholder comment only)
+Adds FilterMonitor air-filter pressure monitors to Home Assistant via **Zeroconf discovery** and **local HTTP** (no MQTT broker configuration required).
 
-Use these web files
-1. Copy the web folder into your project root.
-2. Add this to platformio.ini under your env:
+## Requirements
 
-board_build.embed_txtfiles =
-    web/airscape.html
-    web/esp32.html
-    web/css/app.css
-    web/js/api.js
-    web/js/airscape.js
-    web/js/esp32.js
+- Home Assistant **2024.1** or later
+- FilterMonitor firmware with API v1 (**FMV10.3+** recommended; FMV10.2+ with Sprints A & B)
+- Device and Home Assistant on the same LAN
 
-3. Update your real src/http_server_manager.cpp to serve:
-   /                -> airscape.html
-   /airscape.html   -> airscape.html
-   /esp32.html      -> esp32.html
-   /css/app.css     -> app.css
-   /js/api.js       -> api.js
-   /js/airscape.js  -> airscape.js
-   /js/esp32.js     -> esp32.js
+## Installation
 
-4. Keep your existing JSON API routes:
-   /text_sensor/device_name
-   /sensor/dp_pa_smoothed
-   /number/dp_high_pa
-   /binary_sensor/high_static
-   /switch/ntfy_enable
-   /text/ntfy_topic
-   /switch/unit_inwc
-   /text_sensor/connected_ssid
-   /text_sensor/esphome_version
-   /text_sensor/ip_address
-   /text_sensor/mac_address
-   /binary_sensor/wifi_connected
+### Manual copy
 
-5. Keep your existing write routes:
-   POST /switch/unit_inwc/turn_on
-   POST /switch/unit_inwc/turn_off
-   POST /number/dp_high_pa/set?value=...
-   POST /switch/ntfy_enable/turn_on
-   POST /switch/ntfy_enable/turn_off
-   POST /text/ntfy_topic/set?value=...
+1. Copy the `custom_components/filtermonitor` folder into your Home Assistant `config/custom_components/` directory.
+2. Restart Home Assistant.
+3. Go to **Settings → Devices & Services** — FilterMonitor should appear under **Discovered**.
+4. Click **Configure** → **Submit**.
 
-Regular browser testing
-- Run a local static server in the web folder and open:
-  airscape.html?api=http://filtermonitor-xxxxxx.local
-  esp32.html?api=http://filtermonitor-xxxxxx.local
+### HACS (custom repository)
 
-On-device testing
-- Browse to:
-  http://filtermonitor-xxxxxx.local/
-  http://filtermonitor-xxxxxx.local/esp32.html
+1. In HACS → **Integrations** → **⋮** → **Custom repositories**
+2. Add `https://github.com/agtoronto62-hue/FilterMonitor` as category **Integration**
+3. Install **FilterMonitor** from HACS
+4. Restart Home Assistant
+
+## Manual setup (if discovery fails)
+
+**Settings → Devices & Services → Add Integration → FilterMonitor**
+
+Enter hostname or IP, e.g. `filtermonitor-1cb440.local` or `192.168.68.58`.
+
+## Entities
+
+| Entity | Description |
+|--------|-------------|
+| Differential pressure | Corrected ΔP (Pa) |
+| Air temperature | °C |
+| High static | Binary alarm |
+| High static setpoint | Adjustable 25–500 Pa |
+| Display in inWC | UI unit preference (Pa vs inWC) |
+| ntfy alerts enabled | Push notification toggle |
+| Firmware version | Diagnostic |
+| IP address | Diagnostic |
+| Connected SSID | Diagnostic |
+| Wi-Fi signal | RSSI (dBm) |
+
+## Polling
+
+Status is polled every **30 seconds** from `GET /api/v1/status`.
+
+Setpoint changes use `POST /number/dp_high_pa/set`.
+
+Switches use the same ESPHome-style routes as MQTT discovery (`/switch/unit_inwc/*`, `/switch/ntfy_enable/*`).
+
+## Troubleshooting
+
+- **Not discovered:** Confirm `_filtermonitor._tcp` is visible (`dns-sd -B _filtermonitor._tcp` on Windows, `avahi-browse` on Linux).
+- **Cannot connect:** Use the device IP instead of `.local` if mDNS is blocked on your router.
+- **Duplicate MQTT entities:** On the device web UI, set the active path to **HACS** (this disables MQTT). Do not use both paths at once.
+- **HACS not discovered:** Device must be in **HACS** mode on the Home Assistant web page so `_filtermonitor._tcp` is advertised.
+
+## Development
+
+See `docs/FilterMonitor-Home-Assistant-Integration-Plan.md` in the firmware repository.
