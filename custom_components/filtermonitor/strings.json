@@ -1,0 +1,26 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "FilterMonitor",
+        "description": "Enter the hostname or IP address of your FilterMonitor device.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      },
+      "confirm": {
+        "title": "Confirm FilterMonitor",
+        "description": "Do you want to add **{device_name}**?\n\nHost: {host}\nFirmware: {firmware}\nID: {mac_suffix}"
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to FilterMonitor. Check that the device is on your network."
+    },
+    "abort": {
+      "already_configured": "Device is already configured.",
+      "cannot_connect": "Could not verify the discovered FilterMonitor device.",
+      "unsupported_api": "This FilterMonitor firmware exposes an unsupported API version."
+    }
+  }
+}
