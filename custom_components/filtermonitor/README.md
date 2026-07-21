@@ -5,7 +5,7 @@ Adds FilterMonitor air-filter pressure monitors to Home Assistant via **Zeroconf
 ## Requirements
 
 - Home Assistant **2024.1** or later
-- FilterMonitor firmware with API v1 (**FMV10.3+** recommended; FMV10.2+ with Sprints A & B)
+- FilterMonitor firmware with API v1 (**FMV10.3+** recommended; current release **FMV10.8**)
 - Device and Home Assistant on the same LAN
 
 ## Installation
@@ -20,7 +20,7 @@ Adds FilterMonitor air-filter pressure monitors to Home Assistant via **Zeroconf
 ### HACS (custom repository)
 
 1. In HACS → **Integrations** → **⋮** → **Custom repositories**
-2. Add `https://github.com/agtoronto62-hue/FilterMonitor` as category **Integration**
+2. Add `https://github.com/AirScapeFans/FilterMonitor-HA` as category **Integration**
 3. Install **FilterMonitor** from HACS
 4. Restart Home Assistant
 
@@ -28,7 +28,7 @@ Adds FilterMonitor air-filter pressure monitors to Home Assistant via **Zeroconf
 
 **Settings → Devices & Services → Add Integration → FilterMonitor**
 
-Enter hostname or IP, e.g. `filtermonitor-1cb440.local` or `192.168.68.58`.
+Enter hostname or IP, e.g. `filtermonitor-1cb440.local`, an optional mDNS alias such as `prdfm.local`, or `192.168.68.58`.
 
 ## Entities
 
@@ -62,4 +62,4 @@ Switches use the same ESPHome-style routes as MQTT discovery (`/switch/unit_inwc
 
 ## Development
 
-See `docs/FilterMonitor-Home-Assistant-Integration-Plan.md` in the firmware repository.
+See `docs/FilterMonitor-Home-Assistant-Integration-Plan.md` in the firmware repository: https://github.com/AirScapeFans/FilterMonitor
