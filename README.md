@@ -5,7 +5,7 @@ Adds FilterMonitor air-filter pressure monitors to Home Assistant via **Zeroconf
 ## Requirements
 
 - Home Assistant **2024.1** or later
-- FilterMonitor firmware with API v1 (**FMV10.3+** recommended; current release **FMV10.8**)
+- FilterMonitor firmware with API v1 (**FMV10.3+** recommended; current release **FMV10.9**)
 - Device and Home Assistant on the same LAN
 
 ## Installation
